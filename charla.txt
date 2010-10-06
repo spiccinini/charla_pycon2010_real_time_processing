@@ -1,0 +1,129 @@
+
+Procesamiento y graficado en tiempo real
+========================================
+..  (9.5')
+
+Procesamiento en tiempo real
+----------------------------
+
+* Es posible en python? (0.5')
+
+  - Sí. http://www.flickr.com/photos/heldes/364911349/, http://www.flickr.com/photos/athoos/265329441/ (CC), http://www.flickr.com/photos/jkonig/3061419305/ (CC)
+
+* Hasta qué punto?
+
+  - Depende del contexto. Hay que probarlo!
+
+¿Cómo?
+------
+.. (1')
+
+Clave: Usar las herramientas adecuadas (KISS)
+
+* _Bajo_ SR, cálculos simples: *pure python*
+
+* Otro: numpy, pypy, cython, modulo C o C++
+
+* Audio: numpy + PyAudio o PyJack
+
+* Video: OpenCv + numpy
+
+* TDCxPM: antigravity + soul
+
+* threading, multiprocessing, Queue, Twisted
+  (Mostrar alguna idea con código, con threading por ejemplo.)
+
+Graficación
+-----------
+.. (0.5')
+
+ - pygame
+ - pyglet
+ - matplotlib
+ - GUI: canvas, opengl, bitmaps, etc.
+ - pyqwt
+ - etc
+ - stream_grapher
+
+stream_grapher
+--------------
+..  (1')
+
+* Qué es stream_grapher? (http://bitbucket.org/san/stream_grapher)
+
+  - Un graficador para señales de "tiempo real".
+
+    * Provenientes de serie, USB, network, audio, archivos o generadas "programaticamente".
+
+    * Objetivos: Ayudar en el prototipado y desarrollo de hardware,
+      filtros digitales y analógicos para medicina, audio, robotica, etc. (2')
+
+  - Cómo surgio? Mostrar foto usandolo en Exxer.
+
+Ejemplo filtro de audio
+-----------------------
+.. (1')
+
+.. code-block:: python
+
+    class PasaBajos(object):
+        def __init__(self):
+            FS = 48000.
+            BANDPASS = 1000.
+            STOPBAND = 1500.
+            self.b, self.a = iirdesign(wp = BANDPASS/FS, ws = STOPBAND/FS, gpass=0.1, gstop=40)
+            self.init_cond = numpy.zeros(max(len(self.a),len(self.b))-1)
+
+        def do_filter(self, data):
+            filtered_data, self.init_cond = lfilter(self.b, self.a, data, zi=self.init_cond)
+            return filtered_data
+
+* Listado de funciones para diseñar filtros
+
+Gráfico
+-------
+.. (0.5')
+
+.. image:: images/imagen_filtro.png
+    :scale: 50 %
+
+
+Obtener el audio
+----------------
+.. (2')
+
+.. code-block:: python
+    
+    # Thread
+    # ...
+    jack.activate()
+    BUFF_SIZE = jack.get_buffer_size()
+    input = numpy.zeros((2, BUFF_SIZE), 'f')
+    output = numpy.zeros((2, BUFF_SIZE), 'f')
+
+    while True:
+        jack.process(output, input)
+        input[0] = filtro.do_filter(input[0])
+        self.output = self.input.copy()
+        graph_queue.put(self.input.copy())
+
+.. code-block:: python
+
+    # Backend
+    # ...
+    def get_remaining_samples(self):
+        samples = numpy.ndarray(shape=(2,0), dtype="f")
+        while not in_queue.empty():
+            samples = numpy.hstack(samples, in_queue.get())
+        return samples
+
+
+Showtime!
+---------
+.. (3')
+.. corrida con señal de audio limpia y luego filtrada con un pasabajos 
+
+
+Conclusiónes
+------------
+.. ¿?

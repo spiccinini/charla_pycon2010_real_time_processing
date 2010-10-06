@@ -1,0 +1,4 @@
+* Should probably use pkg_resources for reading out the included Slidy
+  files.
+* Support including an additional stylesheet for custom styling
+* Alternate backgrounds?
