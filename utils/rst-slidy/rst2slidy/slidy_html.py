@@ -19,6 +19,9 @@ from docutils import frontend, nodes, utils
 from docutils.writers import html4css1
 from docutils.parsers.rst import directives
 
+import rst_directive
+
+
 themes_dir_path = utils.relative_path(
     os.path.join(os.getcwd(), 'dummy'),
     os.path.join(os.path.dirname(__file__), 'themes'))
@@ -45,7 +48,7 @@ class Writer(html4css1.Writer):
              'overwritten.  The default is not to overwrite theme files.',
              ['--overwrite-theme-files'],
              {'action': 'store_true', 'validator': frontend.validate_boolean}),
-            
+
             ))
 
     settings_default_overrides = {'toc_backlinks': 0}
@@ -62,9 +65,16 @@ class SlidyXHTMLTranslator(html4css1.HTMLTranslator):
 
     slidy_stylesheet_template = """\
 <!-- Slidy links -->
-<link rel="stylesheet" href="%(path)s/slidy.css"
+<link rel="stylesheet" href="%(path)s/style/slidy.css"
       type="text/css" media="screen, projection, print" />
-<script src="%(path)s/slidy.js" type="text/javascript"></script>
+<link rel="stylesheet" href="%(path)s/style/slidy-theme.css"
+      type="text/css" media="screen, projection, print" />
+<script src="%(path)s/style/slidy.js" type="text/javascript"></script>
+\n"""
+
+    pygmentize_sylesheet = """\
+<link rel="stylesheet" href="style/pygments-style.css"
+      type="text/css" media="screen, projection, print" />
 \n"""
 
     disable_current_slide = """
@@ -116,6 +126,7 @@ class SlidyXHTMLTranslator(html4css1.HTMLTranslator):
 
         self.stylesheet.append(self.slidy_stylesheet_template
                                % {'path': self.theme_file_path})
+        self.stylesheet.append(self.pygmentize_sylesheet)
 
         # self.add_meta('<meta name="version" content="S5 1.1" />\n')
         self.s5_footer = []
@@ -156,7 +167,7 @@ class SlidyXHTMLTranslator(html4css1.HTMLTranslator):
 
             if not os.path.isdir(dest_dir):
                 os.makedirs(dest_dir)
-                
+
         else:
             # no destination, so we can't copy the theme
             return
@@ -176,7 +187,7 @@ class SlidyXHTMLTranslator(html4css1.HTMLTranslator):
             #    theme_paths.append(path)
             #    default = 1
 
-                
+
         if len(required_files_copied) != len(self.required_theme_files):
             # Some required files weren't found & couldn't be copied.
             required = list(self.required_theme_files)
@@ -229,6 +240,19 @@ class SlidyXHTMLTranslator(html4css1.HTMLTranslator):
         self.fragment.extend(self.body)
         # self.body_prefix.extend(layout)
         #self.body_prefix.append('<div class="presentation">\n')
+        self.body_prefix.append(
+        """\
+<div class="background"><img alt="" id="head-icon"
+src="style/icon-blue.png" /><object id="head-logo"
+data="style/w3c-logo-white.svg" type="image/svg+xml"
+title="W3C logo"><a href="http://www.w3.org/"><img
+alt="W3C logo" id="head-logo-fallback"
+src="style/w3c-logo-white.gif" /></a></object></div>
+
+<div class="background slanty">
+<img src="style/w3c-logo-slanted.jpg" alt="Logo" />
+</div>
+""")
         self.body_prefix.append(
             self.starttag({'classes': ['slide'], 'ids': ['slide0']}, 'div'))
         if not self.section_count:
