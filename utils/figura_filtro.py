@@ -6,10 +6,10 @@ FS = 48000.
 BANDPASS = 400.
 STOPBAND = 600.
 
-b, a = iirdesign(wp = BANDPASS/FS, ws = STOPBAND/FS, gpass=0.1, gstop=40)
+b, a = iirdesign(wp = BANDPASS/(FS/2), ws = STOPBAND/(FS/2), gpass=0.1, gstop=40)
 h, w = freqz(b, a, worN=2000)
 
-f = h * 48000. / numpy.pi
+f = h * 48000. / (2*numpy.pi)
 f[0]=10
 
 fig = plt.figure()
