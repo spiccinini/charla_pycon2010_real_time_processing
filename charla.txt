@@ -64,37 +64,54 @@ Ejemplo filtro de audio
 -----------------------
 .. (1')
 
-.. code-block:: python
+..  code-block:: python
 
     class PasaBajos(object):
-        def __init__(self):
-            FS = 48000.
-            BANDPASS = 1000.
-            STOPBAND = 1500.
-            self.b, self.a = iirdesign(wp = BANDPASS/FS, ws = STOPBAND/FS, gpass=0.1, gstop=40)
-            self.init_cond = numpy.zeros(max(len(self.a),len(self.b))-1)
+       def __init__(self):
+          FS = 48000.
+          BANDPASS, STOPBAND = 1000., 1500.
+          wp, ws = BANDPASS/(FS/2), STOPBAND/(FS/2)
+          self.b, self.a = iirdesign(wp=wp, ws=ws,
+                                     gpass=0.1, 
+                                     gstop=40)
+          max_len = max(len(self.a), len(self.b))
+          self.z0 = numpy.zeros(max_len-1)
 
-        def do_filter(self, data):
-            filtered_data, self.init_cond = lfilter(self.b, self.a, data, zi=self.init_cond)
-            return filtered_data
-
-* Listado de funciones para diseñar filtros
+       def do_filter(self, data):
+          filt_data, self.z0 = lfilter(self.b,
+                                       self.a, 
+                                       data,
+                                       self.z0)
+          return filt_data
 
 Gráfico
 -------
 .. (0.5')
 
 .. image:: images/imagen_filtro.png
-    :scale: 50 %
+    :scale: 70 %
 
+Listado de funciones para diseñar filtros
+-----------------------------------------
+* a
+* b
+* c
 
 Obtener el audio
 ----------------
 .. (2')
 
+Patron sencillo: thread + main + Queue
+
+Gráfico
+
+thread
+------
+
+.. Poner mas codigo de thread, inicializacion?
+
 .. code-block:: python
-    
-    # Thread
+
     # ...
     jack.activate()
     BUFF_SIZE = jack.get_buffer_size()
@@ -107,14 +124,18 @@ Obtener el audio
         self.output = self.input.copy()
         graph_queue.put(self.input.copy())
 
+main
+----
+
 .. code-block:: python
 
-    # Backend
     # ...
     def get_remaining_samples(self):
-        samples = numpy.ndarray(shape=(2,0), dtype="f")
+        samples = numpy.ndarray(shape=(2,0), 
+                                dtype="f")
         while not in_queue.empty():
-            samples = numpy.hstack(samples, in_queue.get())
+            samples = numpy.hstack(samples, 
+                                   in_queue.get())
         return samples
 
 

@@ -491,3 +491,10 @@ div.comment { display: none; visibility: hidden }
  div.slide.cover h1 { background: transparent; color: black }
  div.comment { display: block; visibility: visible } 
 }
+
+.highlight pre{
+font-size: 1.35em;
+margin-bottom: 10px;
+margin-top: 5px;
+/*line-height: 1.3em;*/
+}
