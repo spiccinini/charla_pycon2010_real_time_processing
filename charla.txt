@@ -67,21 +67,21 @@ Definiendo la familia de funciones
 ..  code-block:: python
 
     def id_vgs(vgs, k, vt):
-        """ $I_D = k * (V_{GS} - V_T)^2$ """
-        return k * (vgs - vt)**2
+      """ $I_D = k * (V_{GS} - V_T)^2$ """
+      return k * (vgs - vt)**2
 
     def id_vgs_residuo(p, vgs, id_medida):
-        """ Residuo para hallar k y vt
-            utilizando cuadrados mínimos """
-        k, vt = p
-        return id_medida - id_vgs(vgs, k, vt)
+      """ Residuo para hallar k y vt
+          utilizando cuadrados mínimos """
+      k, vt = p
+      return id_medida - id_vgs(vgs, k, vt)
 
 Leyendo los datos
 -----------------
 
 ..  code-block:: python
 
-    from numpy import loadtxt, arange
+    from numpy import loadtxt
 
     # Matriz con las mediciones realizadas
     mediciones = loadtxt('id_vgs.txt')
@@ -124,7 +124,8 @@ Mostrando
     # Grafico la función ajustada
     vmax = vgs[-1]
     vs = arange(vt, vmax + 0.2, 0.01)
-    plt.plot(vs, id_vgs(vs, k, vt), 'r')
+    plt.plot(vs, id_vgs(vs, k, vt), 'b',
+             linewidth = 2)
     leyenda.append(u'Función estimada: $k = %.2f'
     '\\frac{mA}{V^2}$, $V_T = %.3f V$' % (k, vt))
  
@@ -138,6 +139,7 @@ Resultado
 ---------
 
 .. image:: images/ajuste.png
+    :scale: 90 %
 
 
 Procesamiento y graficado en tiempo real
