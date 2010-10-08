@@ -169,15 +169,17 @@ Sí
 
 .. http://www.flickr.com/photos/athoos/265329441/ (CC), http://www.flickr.com/photos/jkonig/3061419305/ (CC)
 
-* Hasta qué punto?
+¿Hasta qué punto?
+~~~~~~~~~~~~~~~~~
 
-  * Depende **mucho** del contexto. Hay que probarlo!
+Depende **mucho** del contexto. Hay que probarlo!
 
 ¿Cómo es posible, python no era lento?
 --------------------------------------
 .. (1')
 
 Clave: Usar las herramientas adecuadas (KISS)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * *Baja FS*, cálculos simples: *pure python*
 
@@ -211,7 +213,7 @@ stream_grapher
 
 * Qué es stream_grapher? (http://bitbucket.org/san/stream_grapher)
 
-Un graficador para señales de "tiempo real"
+Un graficador para señales de *tiempo real*
 
   -  Señales provenientes de
 
@@ -236,6 +238,7 @@ Ejemplo: diseñemos un filtro de audio!
 --------------------------------------
 
 Pongamos en la coctelera:
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * numpy
 * scipy
@@ -302,9 +305,12 @@ Obtener el audio
 ----------------
 .. (2')
 
-Patron sencillo: thread + main + Queue
+Patron sencillo: maint + thread + Queue
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Gráfico hecho con graphviz
+.. image:: images/esquema_filtrado.png
+    :scale: 100 %
+
 
 thread
 ------
