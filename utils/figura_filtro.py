@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import numpy
 
 FS = 48000.
-BANDPASS = 400.
-STOPBAND = 600.
+BANDPASS = 1000.
+STOPBAND = 1500.
 
 b, a = iirdesign(wp = BANDPASS/(FS/2), ws = STOPBAND/(FS/2), gpass=0.1, gstop=40)
 h, w = freqz(b, a, worN=2000)
@@ -22,7 +22,7 @@ plt.ylabel('Amplitude (dB)', color='b')
 plt.xlabel('Frequency (Hz)')
 plt.grid()
 plt.legend()
-plt.show()
+plt.savefig('imagen_filtro.png', dpi=100)
 
 
        

@@ -313,17 +313,22 @@ thread
 
 .. code-block:: python
 
-    # ...
-    jack.activate()
-    BUFF_SIZE = jack.get_buffer_size()
-    input = numpy.zeros((2, BUFF_SIZE), 'f')
-    output = numpy.zeros((2, BUFF_SIZE), 'f')
+    graph_queue = Queue()
 
-    while True:
-        jack.process(output, input)
-        input[0] = filtro.do_filter(input[0])
-        self.output = self.input.copy()
-        graph_queue.put(self.input.copy())
+    class SyncThread(Thread):
+    # ...
+     def run(self):
+       jack.activate()
+       BUFF_SIZE = jack.get_buffer_size()
+       audio_in = numpy.zeros((2, BUFF_SIZE), 'f')
+       audio_out = numpy.zeros((2, BUFF_SIZE), 'f')
+       filtro = PasaBajos()
+
+       while True:
+         jack.process(audio_out, audio_in)
+         audio_in[0] = filtro.do_filter(audio_in[0])
+         audio_out = audio_in.copy()
+         graph_queue.put(audio_in.copy())
 
 main
 ----
@@ -331,13 +336,15 @@ main
 .. code-block:: python
 
     # ...
-    def get_remaining_samples(self):
-        samples = numpy.ndarray(shape=(2,0), 
+    sync_thread = SyncThread().start()
+    # ...
+    def obtener_muestras(self):
+        muestras = numpy.ndarray(shape=(2,0), 
                                 dtype="f")
-        while not in_queue.empty():
-            samples = numpy.hstack(samples, 
-                                   in_queue.get())
-        return samples
+        while not graph_queue.empty():
+            muestras = numpy.hstack(muestras, 
+                                   graph_queue.get())
+        return muestras
 
 
 Showtime!
