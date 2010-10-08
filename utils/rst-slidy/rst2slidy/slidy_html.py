@@ -243,11 +243,9 @@ class SlidyXHTMLTranslator(html4css1.HTMLTranslator):
         self.body_prefix.append(
         """\
 <div class="background"><img alt="" id="head-icon"
-src="style/icon-blue.png" /><object id="head-logo"
-data="style/w3c-logo-white.svg" type="image/svg+xml"
-title="W3C logo"><a href="http://www.w3.org/"><img
-alt="W3C logo" id="head-logo-fallback"
-src="style/w3c-logo-white.gif" /></a></object></div>
+src="style/icon-blue.png" /><a href="http://www.w3.org/">
+<img alt="scipy" id="head-logo" src="style/scipy.png"
+style= "float:right" /></a></div>
 
 <div class="background slanty">
 <img src="style/w3c-logo-slanted.jpg" alt="Logo" />
