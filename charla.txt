@@ -237,31 +237,28 @@ Diseño: scipy al rescate
 ------------------------
 * Filter design
  
- - remez: Calculate the minimax optimal filter using Remez exchange algorithm.
- - firwin: FIR Filter Design using windowed ideal filter method.
- - iirdesign: Complete IIR digital and analog filter design.
- - iirfilter: IIR digital and analog filter design given order and critical points.
- - freqs: Compute frequency response of analog filter.
- - freqz: Compute frequency response of a digital filter.
- - unique_roots: Determine the unique roots and their multiplicities in two lists
- - residue: Compute partial-fraction expansion of b(s) / a(s).
- - residuez: Compute partial-fraction expansion of b(z) / a(z).
- - invres: Compute b(s) and a(s) from partial fraction expansion: r,p,k
- 
-* Matlab-style IIR filter design
+     - ``remez``: Calculate the minimax optimal filter using Remez exchange algorithm.
+     - ``firwin``: FIR Filter Design using windowed ideal filter method.
+     - **iirdesign**: Complete IIR digital and analog filter design.
+     - ``iirfilter``: IIR digital and analog filter design given order and critical points.
+     - ``freqs``: Compute frequency response of analog filter.
+     - ``freqz``: Compute frequency response of a digital filter.
+     - ``unique_roots``: Determine the unique roots and their multiplicities in two lists
+     - ``residue``: Compute partial-fraction expansion of b(s) / a(s).
+     - ``residuez``: Compute partial-fraction expansion of b(z) / a(z).
+     - ``invres``: Compute b(s) and a(s) from partial fraction expansion``: r,p,k
+     - ``butter``: Butterworth digital and analog filter design.
+     - ``buttord``: Butterworth filter order selection.
+     - ``cheby1``: Chebyshev type I digital and analog filter design.
+     - ``cheb1ord``: Chebyshev type I filter order selection.
+     - ``cheby2``: Chebyshev type I digital and analog filter design.
+     - ``cheb2ord``: Chebyshev type II filter order selection.
+     - ``ellip``: Elliptic (Cauer) digital and analog filter design.
+     - ``ellipord``: Elliptic (Cauer) filter order selection.
+     - ``bessel``: Bessel digital and analog filter design.
 
- - butter (N, Wn[, btype, analog, output]) 	Butterworth digital and analog filter design.
- - buttord (wp, ws, gpass, gstop[, analog]) 	Butterworth filter order selection.
- - cheby1 (N, rp, Wn[, btype, analog, output]) 	Chebyshev type I digital and analog filter design.
- - cheb1ord (wp, ws, gpass, gstop[, analog]) 	Chebyshev type I filter order selection.
- - cheby2 (N, rs, Wn[, btype, analog, output]) 	Chebyshev type I digital and analog filter design.
- - cheb2ord (wp, ws, gpass, gstop[, analog]) 	Chebyshev type II filter order selection.
- - ellip (N, rp, rs, Wn[, btype, analog, output]) 	Elliptic (Cauer) digital and analog filter design.
- - ellipord (wp, ws, gpass, gstop[, analog]) 	Elliptic (Cauer) filter order selection.
- - bessel (N, Wn[, btype, analog, output]) 	Bessel digital and analog filter design.
-
-Ejemplo filtro de audio: Pasabajos
-----------------------------------
+Al código
+---------
 .. (1')
 
 ..  code-block:: python
@@ -297,7 +294,7 @@ Obtener el audio
 
 Patron sencillo: thread + main + Queue
 
-Gráfico
+Gráfico hecho con graphviz
 
 thread
 ------
