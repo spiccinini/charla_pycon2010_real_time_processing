@@ -1,3 +1,137 @@
+Python
+======
+
+Qué es Python?
+--------------
+
+  - Un lenguaje de programación fácil y potente
+
+  - Interpretado
+
+  - Dinámico
+
+  - Baterías incluídas 
+
+  - Libre y gratis
+
+  - Excelente documentación
+
+NumPy y Scipy
+=============
+
+NumPy 
+-----
+
+Es un biblioteca de Python que provee el tipo de dato ``array``. Ofrece muchas
+funciones útiles y optimizadas para el procesamiento de números.
+
+ - 
+SciPy 
+-----
+
+
+Optimización
+============
+
+El objetivo es encontrar los valores que mejor ajustan un módelo a ciertas
+mediciones realizadas.
+
+En este ejemplo se buscarán 2 características de un transistor ''Mosfet''
+
+Cómo obtuve los datos
+---------------------
+
+.. TODO: Agregar alguna foto?
+
+En el laboratorio se miden distintas Id variando Vgs y se obtiene una tabla
+como esta::
+
+    #vgs(V) Id(mA)
+    1.5     0.04
+    1.6     0.11
+        ...
+    2.2     19.0
+        ...
+    2.4     42.5
+    2.5     72
+
+Definiendo la familia de funciones
+----------------------------------
+
+..  code-block:: python
+
+    def id_vgs(vgs, k, vt):
+        """ $I_D = k * (V_{GS} - V_T)^2$ """
+        return k * (vgs - vt)**2
+
+    def id_vgs_residuo(p, vgs, id_medida):
+        """ Residuo para hallar k y vt
+            utilizando cuadrados mínimos """
+        k, vt = p
+        return id_medida - id_vgs(vgs, k, vt)
+
+Leyendo los datos
+-----------------
+
+..  code-block:: python
+
+    from numpy import loadtxt, arange
+
+    # Matriz con las mediciones realizadas
+    mediciones = loadtxt('id_vgs.txt')
+
+    # Separo en 2 arrays utiles
+    vgs, i_d = mediciones[:,0], mediciones[:,1]
+
+Optimizando
+-----------
+
+.. code-block:: python
+
+    from scipy.optimize import leastsq
+
+    # Punto desde el que se empieza estimar
+    p0 = (100, 1.5)
+
+    k, vt = leastsq(id_vgs_residuo, p0, args=(vgs, i_d))[0]
+
+
+Mostrando
+---------
+
+.. code-block:: python
+
+    from matplotlib import pyplot as plt
+
+    # Grafico los puntos medidos
+    plt.plot(vgs, i_d, 'ro-')
+    leyenda = ['mediciones']
+
+Mostrando
+---------
+
+.. code-block:: python
+
+    from numpy import arange
+
+    # Grafico la función ajustada
+    vmax = vgs[-1]
+    vs = arange(vt, vmax + 0.2, 0.01)
+    plt.plot(vs, id_vgs(vs, k, vt), 'r')
+    leyenda.append(u'Función estimada: $k = %.2f'
+               '\\frac{mA}{V^2}$, $V_T = %.3f V$' % (k, vt))
+    plt.legend(leyenda, loc='upper left')
+
+    # Texto en los ejes
+    plt.xlabel('$V_{GS}$ [V]')
+    plt.ylabel('$I_D$ [mA]')
+    plt.grid()
+
+Resultado
+---------
+
+.. image:: images/ajuste.png
+
 
 Procesamiento y graficado en tiempo real
 ========================================
