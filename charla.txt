@@ -6,21 +6,37 @@ Procesamiento y graficado en tiempo real
 Procesamiento en tiempo real
 ----------------------------
 
-* Es posible en python? (0.5')
+* Cómputos correctos + resultados a tiempo
+* ¿A tiempo? Dos tipos básicos:
 
-  - Sí. http://www.flickr.com/photos/heldes/364911349/, http://www.flickr.com/photos/athoos/265329441/ (CC), http://www.flickr.com/photos/jkonig/3061419305/ (CC)
+  - Antes de un deadline
+  - Dentro de un margen, ni antes ni después
+
+¿Es posible en python?
+----------------------
+
+.. (0.5')
+
+.. image:: images/bebe.jpg
+    :scale: 120 %
+.. http://www.flickr.com/photos/heldes/364911349/sizes/z/in/photostream/
+
+Sí
+--
+
+.. http://www.flickr.com/photos/athoos/265329441/ (CC), http://www.flickr.com/photos/jkonig/3061419305/ (CC)
 
 * Hasta qué punto?
 
-  - Depende del contexto. Hay que probarlo!
+  * Depende **mucho** del contexto. Hay que probarlo!
 
-¿Cómo?
-------
+¿Cómo es posible, python no era lento?
+--------------------------------------
 .. (1')
 
 Clave: Usar las herramientas adecuadas (KISS)
 
-* _Bajo_ SR, cálculos simples: *pure python*
+* *Baja FS*, cálculos simples: *pure python*
 
 * Otro: numpy, pypy, cython, modulo C o C++
 
@@ -28,22 +44,23 @@ Clave: Usar las herramientas adecuadas (KISS)
 
 * Video: OpenCv + numpy
 
-* TDCxPM: antigravity + soul
-
 * threading, multiprocessing, Queue, Twisted
-  (Mostrar alguna idea con código, con threading por ejemplo.)
+
+.. (Mostrar alguna idea con código, con threading por ejemplo.)
+
+.. * TDCxPM: antigravity + soul
 
 Graficación
 -----------
 .. (0.5')
 
- - pygame
- - pyglet
- - matplotlib
- - GUI: canvas, opengl, bitmaps, etc.
- - pyqwt
- - etc
- - stream_grapher
+- pygame
+- pyglet
+- matplotlib
+- GUIs: canvas, opengl, bitmaps, etc.
+- pyqwt
+- etc
+- **stream_grapher**
 
 stream_grapher
 --------------
@@ -51,17 +68,67 @@ stream_grapher
 
 * Qué es stream_grapher? (http://bitbucket.org/san/stream_grapher)
 
-  - Un graficador para señales de "tiempo real".
+Un graficador para señales de "tiempo real"
 
-    * Provenientes de serie, USB, network, audio, archivos o generadas "programaticamente".
+  -  Señales provenientes de
 
-    * Objetivos: Ayudar en el prototipado y desarrollo de hardware,
-      filtros digitales y analógicos para medicina, audio, robotica, etc. (2')
+    - serie / COM
+    - USB
+    - network
+    - audio
+    - archivos
+    - generadas por código
 
-  - Cómo surgio? Mostrar foto usandolo en Exxer.
+  - Objetivos: Ayudar en el prototipado y desarrollo de hardware,
+    filtros digitales y analógicos para medicina, audio, robotica, etc.
 
-Ejemplo filtro de audio
------------------------
+¿Cómo surgio?
+-------------
+
+.. image:: images/san_exxer.jpeg
+    :scale: 75 %
+
+
+Ejemplo: diseñemos un filtro de audio!
+--------------------------------------
+
+Pongamos en la coctelera:
+
+* numpy
+* scipy
+* jack
+* stream_grapher
+
+
+Diseño: scipy al rescate
+------------------------
+* Filter design
+ 
+ - remez: Calculate the minimax optimal filter using Remez exchange algorithm.
+ - firwin: FIR Filter Design using windowed ideal filter method.
+ - iirdesign: Complete IIR digital and analog filter design.
+ - iirfilter: IIR digital and analog filter design given order and critical points.
+ - freqs: Compute frequency response of analog filter.
+ - freqz: Compute frequency response of a digital filter.
+ - unique_roots: Determine the unique roots and their multiplicities in two lists
+ - residue: Compute partial-fraction expansion of b(s) / a(s).
+ - residuez: Compute partial-fraction expansion of b(z) / a(z).
+ - invres: Compute b(s) and a(s) from partial fraction expansion: r,p,k
+ 
+* Matlab-style IIR filter design
+
+ - butter (N, Wn[, btype, analog, output]) 	Butterworth digital and analog filter design.
+ - buttord (wp, ws, gpass, gstop[, analog]) 	Butterworth filter order selection.
+ - cheby1 (N, rp, Wn[, btype, analog, output]) 	Chebyshev type I digital and analog filter design.
+ - cheb1ord (wp, ws, gpass, gstop[, analog]) 	Chebyshev type I filter order selection.
+ - cheby2 (N, rs, Wn[, btype, analog, output]) 	Chebyshev type I digital and analog filter design.
+ - cheb2ord (wp, ws, gpass, gstop[, analog]) 	Chebyshev type II filter order selection.
+ - ellip (N, rp, rs, Wn[, btype, analog, output]) 	Elliptic (Cauer) digital and analog filter design.
+ - ellipord (wp, ws, gpass, gstop[, analog]) 	Elliptic (Cauer) filter order selection.
+ - bessel (N, Wn[, btype, analog, output]) 	Bessel digital and analog filter design.
+
+Ejemplo filtro de audio: Pasabajos
+----------------------------------
 .. (1')
 
 ..  code-block:: python
@@ -89,13 +156,7 @@ Gráfico
 .. (0.5')
 
 .. image:: images/imagen_filtro.png
-    :scale: 70 %
-
-Listado de funciones para diseñar filtros
------------------------------------------
-* a
-* b
-* c
+    :scale: 100 %
 
 Obtener el audio
 ----------------
