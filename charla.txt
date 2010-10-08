@@ -19,15 +19,22 @@ NumPy y Scipy
 -------------
 
 NumPy
+~~~~~
 
-* Es un biblioteca de Python que provee el tipo de dato ``array``. Ofrece muchas
+* Es un paquete de Python que provee el tipo de dato ``array``. Ofrece muchas
   funciones útiles y optimizadas para el procesamiento de números.
 
 
 SciPy
+~~~~~
 
-* XXX
+* Paquete, que usando NumPy, implementa *muchísimas* funciones.
+  Integración, Optimización, Álgebra, Estadística, Procesamiento de Señales, etc.  
 
+Matplotlib
+~~~~~~~~~~
+
+* Biblioteca para realizar gráficos 2D.
 
 Optimización
 ------------
@@ -38,7 +45,7 @@ mediciones realizadas.
 En este ejemplo se buscarán 2 características de un transistor ''Mosfet''
 
 Cómo obtuve los datos
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 .. TODO: Agregar alguna foto?
 
@@ -92,7 +99,8 @@ Optimizando
     # Punto desde el que se empieza estimar
     p0 = (100, 1.5)
 
-    k, vt = leastsq(id_vgs_residuo, p0, args=(vgs, i_d))[0]
+    k, vt = leastsq(id_vgs_residuo, p0,
+                    args=(vgs, i_d))[0]
 
 
 Mostrando
@@ -118,9 +126,9 @@ Mostrando
     vs = arange(vt, vmax + 0.2, 0.01)
     plt.plot(vs, id_vgs(vs, k, vt), 'r')
     leyenda.append(u'Función estimada: $k = %.2f'
-               '\\frac{mA}{V^2}$, $V_T = %.3f V$' % (k, vt))
+    '\\frac{mA}{V^2}$, $V_T = %.3f V$' % (k, vt))
+ 
     plt.legend(leyenda, loc='upper left')
-
     # Texto en los ejes
     plt.xlabel('$V_{GS}$ [V]')
     plt.ylabel('$I_D$ [mA]')
