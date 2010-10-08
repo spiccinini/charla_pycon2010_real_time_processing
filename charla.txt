@@ -1,3 +1,12 @@
+Presentación
+------------
+
+Python como herramienta de cálculo numérico y procesamiento en tiempo real 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Santiago Piccini <gringotumadre@gmail.com>
+* Diego Mascialino <dmascialino@gmail.com>
+
 Python
 ------
 
@@ -39,6 +48,8 @@ Matplotlib
 Optimización
 ------------
 
+.. TODO: Agregar alguna foto conceptual
+
 El objetivo es encontrar los valores que mejor ajustan un módelo a ciertas
 mediciones realizadas.
 
@@ -47,7 +58,7 @@ En este ejemplo se buscarán 2 características de un transistor ''Mosfet''
 Cómo obtuve los datos
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: Agregar alguna foto?
+.. TODO: Agregar alguna foto midiendo?
 
 En el laboratorio se miden distintas Id variando Vgs y se obtiene una tabla
 como esta::
@@ -109,31 +120,34 @@ Mostrando
 .. code-block:: python
 
     from matplotlib import pyplot as plt
+    from numpy import arange
 
     # Grafico los puntos medidos
     plt.plot(vgs, i_d, 'ro-')
-    leyenda = ['mediciones']
+
+    # Grafico la función ajustada
+    vmax = vgs[-1]
+    vs = arange(vt, vmax + 0.2, 0.01)
+    plt.plot(vs, id_vgs(vs, k, vt), 'b',linewidth = 2)
 
 Mostrando
 ---------
 
 .. code-block:: python
 
-    from numpy import arange
-
-    # Grafico la función ajustada
-    vmax = vgs[-1]
-    vs = arange(vt, vmax + 0.2, 0.01)
-    plt.plot(vs, id_vgs(vs, k, vt), 'b',
-             linewidth = 2)
+    leyenda = ['mediciones']
     leyenda.append(u'Función estimada: $k = %.2f'
     '\\frac{mA}{V^2}$, $V_T = %.3f V$' % (k, vt))
  
     plt.legend(leyenda, loc='upper left')
     # Texto en los ejes
-    plt.xlabel('$V_{GS}$ [V]')
-    plt.ylabel('$I_D$ [mA]')
+    plt.xlabel('$V_{GS}$ [V]'); plt.ylabel('$I_D$ [mA]')
     plt.grid()
+
+    # Guardar y mostrar
+    plt.savefig('ajuste.png')
+    plt.show()
+
 
 Resultado
 ---------
@@ -148,6 +162,9 @@ Procesamiento y graficado en tiempo real
 
 Procesamiento en tiempo real
 ----------------------------
+
+Qué es tiempo? Qué es real?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * Cómputos correctos + resultados a tiempo
 * ¿A tiempo? Dos tipos básicos:
@@ -225,9 +242,9 @@ Un graficador para señales de *tiempo real*
     - generadas por código
 
   - Objetivos: Ayudar en el prototipado y desarrollo de hardware,
-    filtros digitales y analógicos para medicina, audio, robotica, etc.
+    filtros digitales y analógicos para medicina, audio, robótica, etc.
 
-¿Cómo surgio?
+¿Cómo surgió?
 -------------
 
 .. image:: images/san_exxer.jpeg
