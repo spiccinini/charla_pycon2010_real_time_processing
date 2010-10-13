@@ -7,6 +7,12 @@ Python como herramienta de cálculo numérico y procesamiento en tiempo real
 * Santiago Piccini <gringotumadre@gmail.com>
 * Diego Mascialino <dmascialino@gmail.com>
 
+Agradecimientos
+~~~~~~~~~~~~~~~
+
+* IEEE Fiuba
+* Club de Robótica Fiuba
+
 Python
 ------
 
@@ -156,10 +162,6 @@ Resultado
     :scale: 90 %
 
 
-Procesamiento y graficado en tiempo real
-----------------------------------------
-..  (9.5')
-
 Procesamiento en tiempo real
 ----------------------------
 
@@ -248,7 +250,7 @@ Un graficador para señales de *tiempo real*
 -------------
 
 .. image:: images/san_exxer.jpeg
-    :scale: 75 %
+    :scale: 65 %
 
 
 Ejemplo: diseñemos un filtro de audio!
@@ -326,7 +328,7 @@ Patron sencillo: maint + thread + Queue
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/esquema_filtrado.png
-    :scale: 100 %
+    :scale: 80 %
 
 
 thread
@@ -376,6 +378,4 @@ Showtime!
 .. corrida con señal de audio limpia y luego filtrada con un pasabajos 
 
 
-Conclusiónes
-------------
 .. ¿?
