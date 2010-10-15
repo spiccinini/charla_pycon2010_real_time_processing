@@ -7,29 +7,6 @@ Python como herramienta de cálculo numérico y procesamiento en tiempo real
 * Santiago Piccini <gringotumadre@gmail.com>
 * Diego Mascialino <dmascialino@gmail.com>
 
-Agradecimientos
-~~~~~~~~~~~~~~~
-
-* IEEE Fiuba
-* Club de Robótica Fiuba
-
-Python
-------
-
-Qué es Python?
-
-  - Un lenguaje de programación fácil y potente
-
-  - Interpretado
-
-  - Dinámico
-
-  - Baterías incluídas 
-
-  - Libre y gratis
-
-  - Excelente documentación
-
 NumPy y Scipy
 -------------
 
@@ -51,23 +28,39 @@ Matplotlib
 
 * Biblioteca para realizar gráficos 2D.
 
-Optimización
-------------
+Un poco de historia
+-------------------
 
-.. TODO: Agregar alguna foto conceptual
+.. Desde hace 15 años se utiliza ``Python`` en el ámbito científico.
+
+.. Scipy, como paquete, nació hace 5 años, y junto a Numpy son la evolución de mas 
+.. de 15 años de desarrollo
+
+numeric(1995) + numArray(2003)  = Numpy (2005)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+muchos paquete scientificos(1995...) = Scipy(2001)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+foosee.in(2009 -- 2012). U$s 1 x 10^9
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Ajuste
+------
 
 El objetivo es encontrar los valores que mejor ajustan un módelo a ciertas
 mediciones realizadas.
 
 En este ejemplo se buscarán 2 características de un transistor ''Mosfet''
 
+Se utilizará el método ``cuadrados mínimos``.
+
 Cómo obtuve los datos
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: Agregar alguna foto midiendo?
-
-En el laboratorio se miden distintas Id variando Vgs y se obtiene una tabla
-como esta::
+En el laboratorio se miden distintas corrientes variando la tensión y se obtiene
+una tabla como esta::
 
     #vgs(V) Id(mA)
     1.5     0.04
@@ -106,8 +99,8 @@ Leyendo los datos
     # Separo en 2 arrays utiles
     vgs, i_d = mediciones[:,0], mediciones[:,1]
 
-Optimizando
------------
+Ajustando
+---------
 
 .. code-block:: python
 
@@ -132,7 +125,7 @@ Mostrando
     plt.plot(vgs, i_d, 'ro-')
 
     # Grafico la función ajustada
-    vmax = vgs[-1]
+    vmax = vgs.max()
     vs = arange(vt, vmax + 0.2, 0.01)
     plt.plot(vs, id_vgs(vs, k, vt), 'b',linewidth = 2)
 
@@ -165,9 +158,6 @@ Resultado
 Procesamiento en tiempo real
 ----------------------------
 
-Qué es tiempo? Qué es real?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 * Cómputos correctos + resultados a tiempo
 * ¿A tiempo? Dos tipos básicos:
 
@@ -183,18 +173,15 @@ Qué es tiempo? Qué es real?
     :scale: 120 %
 .. http://www.flickr.com/photos/heldes/364911349/sizes/z/in/photostream/
 
-Sí
---
+Sí!!!!!
+-------
 
 .. http://www.flickr.com/photos/athoos/265329441/ (CC), http://www.flickr.com/photos/jkonig/3061419305/ (CC)
 
-¿Hasta qué punto?
-~~~~~~~~~~~~~~~~~
 
-Depende **mucho** del contexto. Hay que probarlo!
 
 ¿Cómo es posible, python no era lento?
---------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. (1')
 
 Clave: Usar las herramientas adecuadas (KISS)
@@ -202,29 +189,15 @@ Clave: Usar las herramientas adecuadas (KISS)
 
 * *Baja FS*, cálculos simples: *pure python*
 
-* Otro: numpy, pypy, cython, modulo C o C++
+* Otro: numpy, cython, modulo C o C++
 
 * Audio: numpy + PyAudio o PyJack
 
 * Video: OpenCv + numpy
 
-* threading, multiprocessing, Queue, Twisted
-
 .. (Mostrar alguna idea con código, con threading por ejemplo.)
 
 .. * TDCxPM: antigravity + soul
-
-Graficación
------------
-.. (0.5')
-
-- pygame
-- pyglet
-- matplotlib
-- GUIs: canvas, opengl, bitmaps, etc.
-- pyqwt
-- etc
-- **stream_grapher**
 
 stream_grapher
 --------------
@@ -253,9 +226,40 @@ Un graficador para señales de *tiempo real*
     :scale: 65 %
 
 
+¿Cómo esta hecho?
+-----------------
+
+* numpy
+* scipy
+* pyglet (OpenGL) Uso directo con numpy de *slices* de los arrays de vertices
+  en memoria de video. Rapido!
+
+..
+    Ejemplo: diseñemos un filtro de audio!
+    --------------------------------------
+
+    * backends
+    * widgets
+    * configuracion/inicializacion en python
+
+    from backends import pyjack
+    audio = pyjack.Jack()
+
+    backends = [audio]
+
+    stream_widget = StreamWidget(...)
+
+    fft_widget = FFTWidget(...)
+
+    widgets = [stream_widget, fft_widget]
+
+    PatchBay.connect(src=audio, src_port=1, out=stream_widget)
+    PatchBay.connect(src=audio, src_port=2, out=fft_widget)
+
+
 Ejemplo: diseñemos un filtro de audio!
 --------------------------------------
-
+ 
 Pongamos en la coctelera:
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -267,7 +271,7 @@ Pongamos en la coctelera:
 
 Diseño: scipy al rescate
 ------------------------
-* Filter design
+* Diseño de filtros
  
      - ``remez``: Calculate the minimax optimal filter using Remez exchange algorithm.
      - ``firwin``: FIR Filter Design using windowed ideal filter method.
@@ -324,11 +328,11 @@ Obtener el audio
 ----------------
 .. (2')
 
-Patron sencillo: maint + thread + Queue
+Patron sencillo: main + thread + Queue
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. image:: images/esquema_filtrado.png
-    :scale: 80 %
+    :scale: 100 %
 
 
 thread
@@ -343,34 +347,13 @@ thread
     class SyncThread(Thread):
     # ...
      def run(self):
-       jack.activate()
-       BUFF_SIZE = jack.get_buffer_size()
-       audio_in = numpy.zeros((2, BUFF_SIZE), 'f')
-       audio_out = numpy.zeros((2, BUFF_SIZE), 'f')
-       filtro = PasaBajos()
+      filtro = PasaBajos()
 
-       while True:
-         jack.process(audio_out, audio_in)
-         audio_in[0] = filtro.do_filter(audio_in[0])
-         audio_out = audio_in.copy()
-         graph_queue.put(audio_in.copy())
-
-main
-----
-
-.. code-block:: python
-
-    # ...
-    sync_thread = SyncThread().start()
-    # ...
-    def obtener_muestras(self):
-        muestras = numpy.ndarray(shape=(2,0), 
-                                dtype="f")
-        while not graph_queue.empty():
-            muestras = numpy.hstack(muestras, 
-                                   graph_queue.get())
-        return muestras
-
+      while True:
+       jack.process((left_out, rigth_out), (left_in, rigth_in))
+       left_out = filtro.do_filter(left_in)
+       rigth_out = rigth_in
+       graph_queue.put((left_out, rigth_out))
 
 Showtime!
 ---------
@@ -378,4 +361,23 @@ Showtime!
 .. corrida con señal de audio limpia y luego filtrada con un pasabajos 
 
 
-.. ¿?
+Conclusiones
+------------
+
+* Es fácil, rápido y potente
+
+* Es lindo
+
+* Sirve para aprender en nuesrtas Universidades. Contagiémoslo!
+
+* Sirve en nuestros trabajos científicos. Disfrutémoslo!
+
+
+¿?
+--
+
+¿Preguntas?
+~~~~~~~~~~~
+
+.. TODO: Imagen 
+
